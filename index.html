@@ -1226,10 +1226,25 @@
               </div>
               
               <!-- Custom GIS Map Overlay Layer Control & Dynamic Legend Panel -->
-              <div class="absolute bottom-4 left-4 z-[400] bg-white/95 backdrop-blur-md p-3.5 rounded-2xl shadow-lg border border-slate-200 text-[10px] max-w-[230px] flex flex-col gap-3">
+              <div id="gis-layer-control-panel" class="absolute bottom-4 left-4 z-[400] bg-white/95 backdrop-blur-md p-3 rounded-2xl shadow-lg border border-slate-200 text-[10px] w-[230px] max-w-[calc(100vw-32px)] flex flex-col gap-2 transition-all duration-300">
                 
-                <!-- Section A: Layer Controls -->
-                <div class="flex flex-col gap-2">
+                <!-- Panel Header with Toggle Button -->
+                <div class="flex items-center justify-between border-b pb-2 px-1 border-slate-100 cursor-pointer select-none" onclick="toggleGisPanel()">
+                  <div class="flex items-center gap-1.5 font-extrabold text-slate-800">
+                    <svg class="w-3.5 h-3.5 text-emerald-600" fill="none" stroke="currentColor" stroke-width="2.5" viewBox="0 0 24 24">
+                      <path stroke-linecap="round" stroke-linejoin="round" d="M10.5 6h9.75M10.5 6a1.5 1.5 0 11-3 0m3 0a1.5 1.5 0 10-3 0M3.75 6H7.5m3 12h9.75m-9.75 0a1.5 1.5 0 01-3 0m3 0a1.5 1.5 0 00-3 0m-3.75 0H7.5m9-6h3.75m-3.75 0a1.5 1.5 0 01-3 0m3 0a1.5 1.5 0 00-3 0m-9.75 0h9.75" />
+                    </svg>
+                    <span>KONTROL & LEGENDA</span>
+                  </div>
+                  <button class="bg-slate-100 hover:bg-slate-200 text-slate-700 rounded-lg p-1 transition flex items-center justify-center font-bold" style="font-size: 11px;">
+                    <span id="gis-panel-toggle-icon">▼</span>
+                  </button>
+                </div>
+
+                <!-- Panel Content wrapper that can be hidden/shown -->
+                <div id="gis-panel-body" class="flex flex-col gap-3 overflow-y-auto max-h-[220px] md:max-h-[420px] pr-1">
+                  <!-- Section A: Layer Controls -->
+                  <div class="flex flex-col gap-2">
                   <span class="font-bold text-slate-700 uppercase tracking-widest border-b pb-1">KONTROL LAYER SPASIAL</span>
                   
                   <label class="flex items-center gap-2 cursor-pointer font-bold text-slate-800 hover:text-emerald-700 select-none">
@@ -1358,8 +1373,9 @@
                   </div>
                 </div>
 
-              </div>
-            </div>
+                </div> <!-- End of gis-panel-body -->
+              </div> <!-- End of gis-layer-control-panel -->
+            </div> <!-- End of relative map parent -->
             
             <!-- Map operational controls footer -->
             <div class="px-4 py-3 bg-slate-50 border-t border-slate-100 flex flex-col sm:flex-row gap-3 items-center justify-between">
@@ -1829,9 +1845,34 @@
         }, 200);
       };
 
+      // GIS Layer Control Panel Collapsible Handler
+      window.toggleGisPanel = function() {
+        const panelBody = document.getElementById('gis-panel-body');
+        const toggleIcon = document.getElementById('gis-panel-toggle-icon');
+        if (panelBody) {
+          if (panelBody.classList.contains('hidden')) {
+            panelBody.classList.remove('hidden');
+            if (toggleIcon) toggleIcon.textContent = '▼';
+          } else {
+            panelBody.classList.add('hidden');
+            if (toggleIcon) toggleIcon.textContent = '▲';
+          }
+        }
+      };
+
       // Set default tab on load
       document.addEventListener('DOMContentLoaded', () => {
         window.switchMobileTab('peta');
+
+        // Collapse GIS panel by default on mobile screens to avoid blocking the map click
+        if (window.innerWidth < 1024) {
+          const panelBody = document.getElementById('gis-panel-body');
+          const toggleIcon = document.getElementById('gis-panel-toggle-icon');
+          if (panelBody) {
+            panelBody.classList.add('hidden');
+            if (toggleIcon) toggleIcon.textContent = '▲';
+          }
+        }
       });
     </script>
 
