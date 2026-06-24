@@ -1,0 +1,10 @@
+{
+  "name": "Remix: AgriMap Lite",
+  "description": "Aplikasi PWA pemetaan pH tanah untuk tanaman cabai dan mentimun yang berjalan sepenuhnya offline.",
+  "requestFramePermissions": [
+    "geolocation"
+  ],
+  "majorCapabilities": [
+    "MAJOR_CAPABILITY_SERVER_SIDE_GEMINI_API"
+  ]
+}
